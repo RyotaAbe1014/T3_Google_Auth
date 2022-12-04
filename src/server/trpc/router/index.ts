@@ -2,9 +2,10 @@
 import { t } from "../trpc";
 import { exampleRouter } from "./example";
 import { authRouter } from "./auth";
-
+import { ScheduleRouter } from './schedule'
 export const appRouter = t.router({
-  auth: authRouter,
+  // auth: authRouter,
+  schedule: ScheduleRouter
 });
 
 // export type definition of API

@@ -10,10 +10,18 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
+
 export const trpc = createTRPCNext<AppRouter>({
   config() {
     return {
       transformer: superjson,
+      // Reactqueryの設定を設定をカスタマイズできる
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {retry: false, refetchOnWindowFocus: false}
+        },
+      },
+      // ここまで
       links: [
         loggerLink({
           enabled: (opts) =>
