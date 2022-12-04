@@ -1,14 +1,22 @@
 import type { NextPage } from "next";
-import FullCalendar from '@fullcalendar/react';
+import FullCalendar, { EventInput } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
 import { Login } from '../components/Login';
 import { signOut } from 'next-auth/react';
+
+
 const Home: NextPage = () => {
   // セッション情報を取得
   const { data: session } = useSession();
+  const { data, isLoading, error } = trpc.schedule.getSchedules.useQuery();
+  // const events: { [key: string]: string } = {}
+
+  const events: EventInput[] = []
+
+
   // セッションが取得できない場合
   if (!session) {
     return (
@@ -17,6 +25,19 @@ const Home: NextPage = () => {
       </>
     );
   }
+  if (isLoading) {
+    return <p>Loading task list...</p>
+  }
+  if (error) {
+    return <p>{error.message}</p>
+  }
+  data?.forEach((schedule) => {
+    events.push({
+      title: schedule.title,
+      start: schedule.start,
+      end: schedule.end
+    })
+  })
   return (
     <>
       <div className="bg-white lg:pb-12">
@@ -31,15 +52,6 @@ const Home: NextPage = () => {
             {/* <!-- nav - start --> */}
             <nav className="hidden lg:flex gap-12">
               <a href="/" className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100">Home</a>
-              <a href="" className="inline-flex items-center text-indigo-500 text-lg font-semibold gap-1">
-                Features
-
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-800" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-              </a>
-              <a href="" className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100">Pricing</a>
-              <a href="" className="text-gray-600 hover:text-indigo-500 active:text-indigo-700 text-lg font-semibold transition duration-100">About</a>
             </nav>
             {/* <!-- nav - end -->
 
@@ -74,13 +86,7 @@ const Home: NextPage = () => {
                 center: '',
                 right: ''
               }}
-              events={[
-                { title: 'e1', start: '2022-12-14' },
-                { title: 'e2', start: '2022-12-14', end: '2022-12-27' },
-                { title: 'e3', start: '2022-12-12', end: '2022-12-17' },
-                { title: 'e4', start: '2022-12-1', end: '2022-12-28' },
-                { title: 'e5', start: '2022-12-24', end: '2022-12-29' },
-              ]}
+              events={events}
             />
           </div>
           {/* <!-- menu - end --> */}

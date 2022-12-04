@@ -1,6 +1,14 @@
 -- CreateTable
-CREATE TABLE "Example" (
-    "id" TEXT NOT NULL PRIMARY KEY
+CREATE TABLE "Schedule" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "body" TEXT,
+    "start" DATETIME NOT NULL,
+    "end" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Schedule_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -44,6 +52,9 @@ CREATE TABLE "VerificationToken" (
     "token" TEXT NOT NULL,
     "expires" DATETIME NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Schedule_id_key" ON "Schedule"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");

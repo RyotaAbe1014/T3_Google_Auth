@@ -20,6 +20,7 @@ export const ScheduleRouter = t.router({
       })
       return schedule
     }),
+
   getSchedules: t.procedure.query(({ ctx }) => {
     return ctx.prisma.schedule.findMany({
       where: {
