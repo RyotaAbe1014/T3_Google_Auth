@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     );
   }
   if (isLoading) {
-    return <p>Loading task list...</p>
+    return <p>Loading</p>
   }
   if (error) {
     return <p>{error.message}</p>
