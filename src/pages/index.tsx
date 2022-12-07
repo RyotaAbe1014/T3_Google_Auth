@@ -6,6 +6,7 @@ import { Calendar } from "../components/schedule/Calendar";
 import { useMutateSchedule } from "../hooks/useMutateSchedule";
 import { FormEvent } from "react";
 import { useState } from "react";
+import { parse } from 'date-fns/fp';
 
 
 const Home: NextPage = () => {
@@ -13,8 +14,10 @@ const Home: NextPage = () => {
   const { data: session } = useSession();
   const { createScheduleMutation } = useMutateSchedule();
   const [title, setTitle] = useState('');
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -22,10 +25,18 @@ const Home: NextPage = () => {
     if (!startDate || !endDate) {
       return false
     }
+    const parseString = parse(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    //parse実行
+    console.log(startDate)
+    console.log(startTime)
+    const dateFromStartDate = parseString(`${startDate} ${startTime}:00`);
+    const dateFromEndDate = parseString(`${endDate} ${endTime}:00`);
+
+    console.log(dateFromEndDate)
     createScheduleMutation.mutate({
       title: title,
-      start: startDate,
-      end: endDate,
+      start: dateFromStartDate,
+      end: dateFromEndDate,
     })
   };
   // セッションが取得できない場合
@@ -78,20 +89,29 @@ const Home: NextPage = () => {
                 <div className="sm:col-span-2">
                   <label for="title" className="inline-block text-gray-800 text-sm sm:text-base mb-2">名前</label>
                   <input name="title" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
 
                 <div>
                   <label for="start-date" className="inline-block text-gray-800 text-sm sm:text-base mb-2">開始日</label>
-                  <input name="start-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2" 
-                  onChange={(e) => setStartDate((e.target.value))}/>
+                  <input name="start-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
+                    onChange={(e) => setStartDate((e.target.value))} />
+                  <label for="start-time" className="inline-block text-gray-800 text-sm sm:text-base mb-2">開始時間</label>
+                  <input name="start-time" type="time" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
+                    onChange={(e) => setStartTime((e.target.value))} />
                 </div>
 
                 <div>
                   <label for="end-date" className="inline-block text-gray-800 text-sm sm:text-base mb-2">終了日</label>
-                  <input name="end-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2" />
+                  <input name="end-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
+                    onChange={(e) => setEndDate((e.target.value))}
+                  />
+                  <label for="end-time" className="inline-block text-gray-800 text-sm sm:text-base mb-2">終了時間</label>
+                  <input name="end-time" type="time" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
+                    onChange={(e) => setEndTime((e.target.value))}
+                  />
                 </div>
 
                 <div className="sm:col-span-2 flex justify-between items-center">
