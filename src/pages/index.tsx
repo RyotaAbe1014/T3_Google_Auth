@@ -1,16 +1,33 @@
 import type { NextPage } from "next";
-
-import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
 import { Login } from '../components/Login';
 import { signOut } from 'next-auth/react';
 import { Calendar } from "../components/schedule/Calendar";
+import { useMutateSchedule } from "../hooks/useMutateSchedule";
+import { FormEvent } from "react";
+import { useState } from "react";
 
 
 const Home: NextPage = () => {
   // セッション情報を取得
   const { data: session } = useSession();
+  const { createScheduleMutation } = useMutateSchedule();
+  const [title, setTitle] = useState('');
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      return false
+    }
+    createScheduleMutation.mutate({
+      title: title,
+      start: startDate,
+      end: endDate,
+    })
+  };
   // セッションが取得できない場合
   if (!session) {
     return (
@@ -55,6 +72,34 @@ const Home: NextPage = () => {
             {/* <!-- buttons - end --> */}
           </header>
           <Calendar />
+          <div className="bg-white py-6 sm:py-8 lg:py-12">
+            <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
+              <form onSubmit={handleSubmit} className="max-w-screen-md grid sm:grid-cols-2 gap-4 mx-auto">
+                <div className="sm:col-span-2">
+                  <label for="title" className="inline-block text-gray-800 text-sm sm:text-base mb-2">名前</label>
+                  <input name="title" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label for="start-date" className="inline-block text-gray-800 text-sm sm:text-base mb-2">開始日</label>
+                  <input name="start-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2" 
+                  onChange={(e) => setStartDate((e.target.value))}/>
+                </div>
+
+                <div>
+                  <label for="end-date" className="inline-block text-gray-800 text-sm sm:text-base mb-2">終了日</label>
+                  <input name="end-date" type="date" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2" />
+                </div>
+
+                <div className="sm:col-span-2 flex justify-between items-center">
+                  <button className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3" type="submit">Send</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </>
