@@ -14,14 +14,13 @@ export const Calendar: FC = () => {
   if (error) {
     return <p>{error.message}</p>
   }
-  data?.forEach((schedule) => {
+  data?.forEach((schedule) => (
     events.push({
       title: schedule.title,
       start: schedule.start,
       end: schedule.end
     })
-  })
-  
+  ))
   return (
     <div className="w-full max-w-screen-sm hidden lg:block bg-white border rounded-lg shadow-sm overflow-hidden -mt-4 mx-auto">
       <FullCalendar

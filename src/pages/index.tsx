@@ -86,6 +86,11 @@ const Home: NextPage = () => {
           <div className="bg-white py-6 sm:py-8 lg:py-12">
             <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
               <form onSubmit={handleSubmit} className="max-w-screen-md grid sm:grid-cols-2 gap-4 mx-auto">
+                {createScheduleMutation.error?.data?.zodError &&
+                <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                <span className="font-medium">{createScheduleMutation.error.data.zodError.fieldErrors.title}</span>
+              </div>
+                }
                 <div className="sm:col-span-2">
                   <label for="title" className="inline-block text-gray-800 text-sm sm:text-base mb-2">名前</label>
                   <input name="title" className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
