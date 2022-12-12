@@ -18,7 +18,7 @@ export const Calendar: FC = () => {
         }))
       );
     }
-  }, [data, events]);
+  }, [data]);
 
   if (isLoading) {
     return <p>Loading...</p>

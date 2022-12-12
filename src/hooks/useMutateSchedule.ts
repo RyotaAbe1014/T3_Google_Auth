@@ -14,6 +14,7 @@ export const useMutateSchedule = () => {
       if (previousSchedules) {
         // キャッシュに追加したデータを追加
         utils.schedule.getSchedules.setData({ res, ...previousSchedules })
+        window.location.reload();
       }
     },
   })
