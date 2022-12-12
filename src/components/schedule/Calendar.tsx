@@ -11,7 +11,7 @@ export const Calendar: FC = () => {
   useEffect(() => {
     if (data) {
       setEvents(
-        data?.map((schedule) => ({
+        data.map((schedule) => ({
           title: schedule.title,
           start: schedule.start,
           end: schedule.end,
