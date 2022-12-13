@@ -83,7 +83,9 @@ const Home: NextPage = () => {
             </button>
             {/* <!-- buttons - end --> */}
           </header>
-          <Calendar />
+          <div className="w-full max-w-screen-sm hidden lg:block bg-white border rounded-lg shadow-sm overflow-hidden -mt-4 mx-auto">
+            <Calendar />
+          </div>
           <div className="bg-white py-6 sm:py-8 lg:py-12">
             <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
               <form onSubmit={handleSubmit} className="max-w-screen-md grid sm:grid-cols-2 gap-4 mx-auto">
