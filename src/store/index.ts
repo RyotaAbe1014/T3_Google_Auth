@@ -1,23 +1,24 @@
 import create from 'zustand';
+import { UpdateScheduleInput } from '../schema/schedule';
+
 
 // zustandで管理するステートを定義する
 type State = {
-  editedTask: UpdateTaskInput;
-  updateEditedTask: (payload: UpdateTaskInput) => void;
-  resetEditedTask: () => void;
+  editedSchedule: UpdateScheduleInput;
+  updateEditedSchedule: (payload: UpdateScheduleInput) => void;
+  resetEditedSchedule: () => void;
 };
 
 // storeを定義
 const useStore = create<State>((set) => ({
   // 初期値を定義
-  editedTask: { taskId: '', title: '', body: '' },
+  editedSchedule: { scheduleId: '', title: '', start: new Date, end: new Date },
   // ロジック
-  updateEditedTask: (payload) =>
+  updateEditedSchedule: (payload) =>
     set({
-      editedTask: payload,
+      editedSchedule: payload,
     }),
-  resetEditedTask: () => set({ editedTask: { taskId: '', title: '', body: '' } }),
+  resetEditedSchedule: () => set({ editedSchedule: { scheduleId: '', title: '', start: new Date, end: new Date } }),
 }))
 
-// Reactから使用できるように
 export default useStore;
