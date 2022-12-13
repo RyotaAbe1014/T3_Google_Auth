@@ -7,17 +7,21 @@ import { useMutateSchedule } from "../hooks/useMutateSchedule";
 import { FormEvent } from "react";
 import { useState } from "react";
 import { parse } from 'date-fns/fp';
+import useStore from "../store";
 
 
 const Home: NextPage = () => {
   // セッション情報を取得
   const { data: session } = useSession();
   const { createScheduleMutation } = useMutateSchedule();
-  const [title, setTitle] = useState('');
-  const [startDate, setStartDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const { editedSchedule } = useStore();
+  const update = useStore((state) => state.editedSchedule)
+
+  const [title, setTitle] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -27,12 +31,9 @@ const Home: NextPage = () => {
     }
     const parseString = parse(new Date(), 'yyyy-MM-dd HH:mm:ss');
     //parse実行
-    console.log(startDate)
-    console.log(startTime)
     const dateFromStartDate = parseString(`${startDate} ${startTime}:00`);
     const dateFromEndDate = parseString(`${endDate} ${endTime}:00`);
 
-    console.log(dateFromEndDate)
     createScheduleMutation.mutate({
       title: title,
       start: dateFromStartDate,
