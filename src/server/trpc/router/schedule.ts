@@ -1,5 +1,5 @@
 // 各スキーマのインポート
-import { createScheduleSchema, updateScheduleSchema, getSingleScheduleSchema } from '../.././../schema/schedule';
+import { createScheduleSchema, updateScheduleSchema, getSingleScheduleSchema, deleteScheduleSchema } from '../.././../schema/schedule';
 import { authedProcedure, t } from "../trpc";
 
 // Routerの作成
@@ -55,5 +55,14 @@ export const ScheduleRouter = t.router({
         },
       })
       return schedule
+    }),
+  // 削除
+  deleteSchedule: authedProcedure.input(deleteScheduleSchema)
+    .mutation(async ({ ctx, input }) => {
+      const schedule = await ctx.prisma.schedule.delete({
+        where: {
+          id: input.scheduleId,
+        },
+      })
     }),
 })
