@@ -1,8 +1,5 @@
 import z from "zod";
 
-
-import z from "zod";
-
 const title = z.string().max(20);
 const start = z.date();
 const end = z.date();
@@ -29,12 +26,12 @@ export type UpdateScheduleInput = z.TypeOf<typeof updateScheduleSchema>
 
 
 // 取得用
-export const getSingleTaskSchema = z.object({
+export const getSingleScheduleSchema = z.object({
   scheduleId
 })
 
 
 // 削除用
-export const deleteTaskSchema = z.object({
+export const deleteScheduleSchema = z.object({
   scheduleId
 })
